@@ -1,0 +1,18 @@
+<!-- One way Binding-->
+<!--<textarea rows='6' [value]='newPost' #postInput></textarea> -->
+
+<!-- Two way Binding -->
+<!-- ngModel is a directive that will listen to the user input and also store it. -->
+
+<!-- These Matinputs online work with mat-form-field tags (Check Angular Material API) -->
+<mat-card>
+  <mat-form-field>
+    <input matInput type = 'text' [(ngModel)] = 'enteredTitle'>
+  </mat-form-field>
+
+  <mat-form-field>
+    <textarea rows='6' matInput [(ngModel)] = 'enteredContent'></textarea>
+  </mat-form-field>
+  <button mat-raised-button color='accent' (click)='onAddPost()'>Save Post!</button>
+</mat-card>
+<hr>
