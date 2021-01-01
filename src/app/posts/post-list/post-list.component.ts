@@ -1,6 +1,7 @@
 import { Component, Input } from "@angular/core";
 
 import {Post} from '../post.model';
+import { PostsService } from "../posts.service";
 
 @Component({
   selector: 'app-post-list',
@@ -15,4 +16,14 @@ export class PostListComponent {
   // ];
 
   @Input() posts: Post[] = [];
+
+  // postsService: PostsService;
+  /* Dependency Injection */
+  // constructor(postsService: PostsService) {
+  //   this.postsService = postsService;
+  // }
+
+  /* Simpler version of what is written above. */
+  constructor(public postsService: PostsService) {}
+  
 }

@@ -6,13 +6,21 @@
 
 <!-- These Matinputs online work with mat-form-field tags (Check Angular Material API) -->
 <mat-card>
-  <mat-form-field>
-    <input matInput type = 'text' [(ngModel)] = 'enteredTitle'>
-  </mat-form-field>
+  <!-- #postForm = ngForm gives you access to the angular object that was built behind the scenes to track the ngModel -->
+  <form (submit) = 'onAddPost(postForm)' #postForm = 'ngForm'>
+    <mat-form-field>
+      <!-- <input matInput type = 'text' [(ngModel)] = 'enteredTitle'> -->
+      <input matInput type = 'text' name = 'title' ngModel required #title = 'ngModel'>
+      <mat-error *ngIf = "title.invalid">Please enter a post title.</mat-error>
+    </mat-form-field>
 
-  <mat-form-field>
-    <textarea rows='6' matInput [(ngModel)] = 'enteredContent'></textarea>
-  </mat-form-field>
-  <button mat-raised-button color='accent' (click)='onAddPost()'>Save Post!</button>
+    <mat-form-field>
+      <!-- <textarea rows='6' matInput [(ngModel)] = 'enteredContent'></textarea> -->
+      <textarea rows = '4' matInput name = 'content' ngModel required #content = 'ngModel'></textarea>
+      <mat-error *ngIf = "content.invalid">Please enter a post content.</mat-error>
+    </mat-form-field>
+    <!-- <button mat-raised-button color='accent' (click)='onAddPost()'>Save Post!</button> -->
+    <button mat-raised-button color = 'accent' type = 'submit'>Save Post!</button>
+  </form>
 </mat-card>
 <hr>
