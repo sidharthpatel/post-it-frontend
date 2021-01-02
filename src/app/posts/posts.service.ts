@@ -1,10 +1,13 @@
 import {Post} from './post.model';
 import {Injectable} from '@angular/core';
+/* Event emitter: helps pass around objects in the application, essentially. */
+import {Subject} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class PostsService{
   /* Initializing the array empty initially. Can set it to undefined too. */
   private posts: Post[] = [];
+  private postsUpdated = new Subject<Post[]>();
 
   getPosts() {
     /**
@@ -19,9 +22,15 @@ export class PostsService{
     return [...this.posts];
   }
 
+  getPostUpdateListener() {
+    /* asObservable method allows you to listen, but prevent your from emitting. */
+    return this.postsUpdated.asObservable();
+  }
+
   addPosts(title: string, content: string) {
     /* Created a new variable called post */
     const post: Post = {title: title, content: content};
     this.posts.push(post);
+    this.postsUpdated.next([...this.posts]);
   }
 }
