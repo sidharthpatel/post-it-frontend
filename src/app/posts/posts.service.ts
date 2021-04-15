@@ -2,12 +2,17 @@ import {Post} from './post.model';
 import {Injectable} from '@angular/core';
 /* Event emitter: helps pass around objects in the application, essentially. */
 import {Subject} from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({providedIn: 'root'})
 export class PostsService{
   /* Initializing the array empty initially. Can set it to undefined too. */
   private posts: Post[] = [];
   private postsUpdated = new Subject<Post[]>();
+
+  constructor(private http: HttpClient) {
+
+  }
 
   getPosts() {
     /**
@@ -19,7 +24,13 @@ export class PostsService{
      * ... - Takes all the elements of another array and adds it to the new array.
      * It will also prevent any changes to the original array mentioned above.
      */
-    return [...this.posts];
+    // return [...this.posts];
+
+    this.http.get<{message: string, posts: Post[]}>('http://localhost:3000/api/posts')
+    .subscribe((postData) => {
+      this.posts = postData.posts;
+      this.postsUpdated.next([...this.posts]);
+    });
   }
 
   getPostUpdateListener() {
@@ -29,7 +40,7 @@ export class PostsService{
 
   addPosts(title: string, content: string) {
     /* Created a new variable called post */
-    const post: Post = {title: title, content: content};
+    const post: Post = {id: null, title: title, content: content};
     this.posts.push(post);
     this.postsUpdated.next([...this.posts]);
   }
