@@ -1,17 +1,54 @@
+const app = require("./backend/app");
+const debug = require("debug")("node-angular");
 const http = require("http");
-const expressApp = require("./backend/app");
 
-/**
-const server = http.createServer((request, response) => {
-    response.end("This is my first response");
-});
-*/
+/* Error checking the port. */
+const normalizePort = val => {
+  var port = parseInt(val, 10);
 
-/* Configure the express app regarding the port we will be listening to. */
-const port = process.env.PORT || 3000;
-expressApp.set('port', port);
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
 
-/* To pass the express into the Node.JS server, simply pass the app.*/
-const server = http.createServer(expressApp);
+  if (port >= 0) {
+    // port number
+    return port;
+  }
 
+  return false;
+};
+
+const onError = error => {
+  if (error.syscall !== "listen") {
+    throw error;
+  }
+  const bind = typeof port === "string" ? "pipe " + port : "port " + port;
+  switch (error.code) {
+    case "EACCES":
+      console.error(bind + " requires elevated privileges");
+      process.exit(1);
+      break;
+    case "EADDRINUSE":
+      console.error(bind + " is already in use");
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+};
+
+const onListening = () => {
+  const addr = server.address();
+  const bind = typeof port === "string" ? "pipe " + port : "port " + port;
+  debug("Listening on " + bind);
+};
+
+const port = normalizePort(process.env.PORT || "3000");
+app.set("port", port);
+
+const server = http.createServer(app);
+/* Registering listeners */
+server.on("error", onError);
+server.on("listening", onListening);
 server.listen(port);
