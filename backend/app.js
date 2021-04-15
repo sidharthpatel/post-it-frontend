@@ -9,6 +9,17 @@ app.use((request, response, next) => {
   next();
 });
 
+/* Middle ware to deal with CORS problem. ** Details in Server.js file. ** */
+app.use((request, response, next) => {
+    /**
+     * setHeader(key, value)
+     * Our key is a browser identifier which will give access, but to what??
+     * the star * represents a universal symbol. So, we are giving universal access.
+     */
+    response.setHeader('Access-Control-Allow-Origin', '*');
+    next();
+});
+
 /**
  * Only the /api/posts requests will be handled by our backend.
  * /api is to ensure we are dealing with ONLY the REST api requests.

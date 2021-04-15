@@ -41,3 +41,11 @@ export class PostListComponent implements OnInit, OnDestroy {
     this.postsSub.unsubscribe();
   }
 }
+
+/**
+ * What is the CORS error (Cross Origin Resource Sharing)?
+ * Our client, angular, and our server, server.js, want to talk to each other. Unfortunately they are not on the same path or localhost: port <-
+ * If they were, we would be able to communicate without any issues. 
+ * The reason why it can't is due to security mechanism.
+ * Solution: disable this mechanism in Server-side code.
+ */
