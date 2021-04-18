@@ -1,12 +1,29 @@
 /* Holds the express file. */
 const express = require('express');
+const bodyParser = require('body-parser');
 
 /* Initial express usage. */
 const app = express();
+
+app.use(bodyParser.json());
+/* Only support default URL features. */
+app.use(bodyParser.urlencoded({extended: false}));
+
 app.use((request, response, next) => {
   console.log('First middleware');
   /* With the help of next function, the request can continue it's journey. */
   next();
+});
+
+/* Middle ware for post requests only. */
+app.post("/api/posts", (request, response, next) => {
+  /* One post */
+  const posts = request.body;
+  console.log(post);
+  /** Status code means everything is okay and a new resource was created. */
+  response.status(201).json({
+    message: 'Post added successfully'
+  });
 });
 
 /* Middle ware to deal with CORS problem. ** Details in Server.js file. ** */
@@ -17,6 +34,10 @@ app.use((request, response, next) => {
      * the star * represents a universal symbol. So, we are giving universal access.
      */
     response.setHeader('Access-Control-Allow-Origin', '*');
+    /** Any extra headers that may be blocked can also gain access */
+    response.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    /** type of methods or http words can be used to send request */
+    response.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
     next();
 });
 
@@ -40,6 +61,7 @@ app.use('/api/posts', (request, response, next) => {
   //   response.json(posts);
   /**
    * We can send the posts array directly in json as an Array is valid json object.
+   * Status code 200: Everything is okay.
    */
   response.status(200).json({
       message: 'Posts fetched successfully!',
