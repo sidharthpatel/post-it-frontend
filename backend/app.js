@@ -15,16 +15,7 @@ app.use((request, response, next) => {
   next();
 });
 
-/* Middle ware for post requests only. */
-app.post("/api/posts", (request, response, next) => {
-  /* One post */
-  const posts = request.body;
-  console.log(post);
-  /** Status code means everything is okay and a new resource was created. */
-  response.status(201).json({
-    message: 'Post added successfully'
-  });
-});
+
 
 /* Middle ware to deal with CORS problem. ** Details in Server.js file. ** */
 app.use((request, response, next) => {
@@ -34,11 +25,23 @@ app.use((request, response, next) => {
      * the star * represents a universal symbol. So, we are giving universal access.
      */
     response.setHeader('Access-Control-Allow-Origin', '*');
+    // request.setHeader('Access-Control-Allow-Origin', '*');
     /** Any extra headers that may be blocked can also gain access */
     response.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     /** type of methods or http words can be used to send request */
     response.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
     next();
+});
+
+/* Middle ware for post requests only. */
+app.post("/api/posts", (request, response, next) => {
+  /* One post */
+  const posts = request.body;
+  console.log(posts);
+  /** Status code means everything is okay and a new resource was created. */
+  response.status(201).json({
+    message: 'Post added successfully'
+  });
 });
 
 /**

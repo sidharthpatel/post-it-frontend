@@ -41,7 +41,11 @@ export class PostsService{
   addPosts(title: string, content: string) {
     /* Created a new variable called post */
     const post: Post = {id: null, title: title, content: content};
-    this.posts.push(post);
-    this.postsUpdated.next([...this.posts]);
+    this.http.post<{message: string}>('http://localhost:3000/api/posts', post).subscribe((responseData) => {
+      console.log(responseData.message);
+      this.posts.push(post);
+      this.postsUpdated.next([...this.posts]);
+    });
+    
   }
 }
