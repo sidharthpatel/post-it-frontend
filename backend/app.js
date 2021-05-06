@@ -2,6 +2,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
+const Post = require('./post');
+
 /* Initial express usage. */
 const app = express();
 
@@ -33,10 +35,14 @@ app.use((request, response, next) => {
     next();
 });
 
+// VpuRHguny0C3F1oT
 /* Middle ware for post requests only. */
 app.post("/api/posts", (request, response, next) => {
   /* One post */
-  const posts = request.body;
+  const posts = new Post({
+    title: request.body.title,
+    content: request.body.content
+  });
   console.log(posts);
   /** Status code means everything is okay and a new resource was created. */
   response.status(201).json({
