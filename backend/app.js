@@ -7,6 +7,17 @@ const Post = require('./post');
 /* Initial express usage. */
 const app = express();
 
+/** Importing Mongoose */
+const mongoose = require("mongoose");
+
+mongoose.connect("mongodb+srv://siddharth:VpuRHguny0C3F1oT@cluster0.8cx44.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+.then(() => {
+  console.log("Database Connection Successful!")
+})
+.catch(() => {
+  console.log("Connection Failed!");
+});
+
 app.use(bodyParser.json());
 /* Only support default URL features. */
 app.use(bodyParser.urlencoded({extended: false}));
@@ -35,7 +46,6 @@ app.use((request, response, next) => {
     next();
 });
 
-// VpuRHguny0C3F1oT
 /* Middle ware for post requests only. */
 app.post("/api/posts", (request, response, next) => {
   /* One post */
