@@ -10,7 +10,7 @@ const app = express();
 /** Importing Mongoose */
 const mongoose = require("mongoose");
 
-mongoose.connect("mongodb+srv://siddharth:VpuRHguny0C3F1oT@cluster0.8cx44.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+mongoose.connect("mongodb+srv://siddharth:VpuRHguny0C3F1oT@cluster0.8cx44.mongodb.net/node-angular?retryWrites=true&w=majority")
 .then(() => {
   console.log("Database Connection Successful!")
 })
@@ -49,11 +49,12 @@ app.use((request, response, next) => {
 /* Middle ware for post requests only. */
 app.post("/api/posts", (request, response, next) => {
   /* One post */
-  const posts = new Post({
+  const post = new Post({
     title: request.body.title,
     content: request.body.content
   });
-  console.log(posts);
+  /** Default Mongoose method */
+  post.save();
   /** Status code means everything is okay and a new resource was created. */
   response.status(201).json({
     message: 'Post added successfully'
@@ -66,26 +67,18 @@ app.post("/api/posts", (request, response, next) => {
  */
 app.use('/api/posts', (request, response, next) => {
   // response.send("Hello from express!");
-  const posts = [{
-      id: 'fadf12421l',
-      title: 'First Server-side post',
-      content: 'This is coming from the server'
-    },
-    {
-      id: 'ksajflaj132',
-      title: 'Second Server-side post',
-      content: 'This is coming from the server!!'
-    }
-  ];
+  Post.find().then(documents => {
+    response.status(200).json({
+      message: 'Posts fetched successfully!',
+      posts: documents
+  });
+  });
   //   response.json(posts);
   /**
    * We can send the posts array directly in json as an Array is valid json object.
    * Status code 200: Everything is okay.
    */
-  response.status(200).json({
-      message: 'Posts fetched successfully!',
-      posts: posts
-  });
+  
 });
 
 /* Exporting the express class to the Node.JS. */
