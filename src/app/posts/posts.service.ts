@@ -1,8 +1,9 @@
 import {Post} from './post.model';
-import {Injectable} from '@angular/core';
+import {Injectable, ɵgetDebugNode__POST_R3__} from '@angular/core';
 /* Event emitter: helps pass around objects in the application, essentially. */
 import {Subject} from 'rxjs';
 import { HttpClient } from '@angular/common/http';
+import {map} from 'rxjs/operators';
 
 @Injectable({providedIn: 'root'})
 export class PostsService{
@@ -26,9 +27,18 @@ export class PostsService{
      */
     // return [...this.posts];
 
-    this.http.get<{message: string, posts: Post[]}>('http://localhost:3000/api/posts')
-    .subscribe((postData) => {
-      this.posts = postData.posts;
+    this.http.get<{message: string, posts: any}>('http://localhost:3000/api/posts')
+    .pipe(map((postData) => {
+      return postData.posts.map(post => {
+        return {
+          title: post.title,
+          content: post.content,
+          id: post._id
+        }
+      });
+    }))
+    .subscribe((transformedPost) => {
+      this.posts = transformedPost;
       this.postsUpdated.next([...this.posts]);
     });
   }
@@ -41,7 +51,7 @@ export class PostsService{
   addPosts(title: string, content: string) {
     /* Created a new variable called post */
     const post: Post = {id: null, title: title, content: content};
-    this.http.post<{message: string}>('http://localhost:3000/api/posts', post).subscribe((responseData) => {
+    this.http.post<{message: string}>('http://localhost:3000/api/posts', post).pipe().subscribe((responseData) => {
       console.log(responseData.message);
       this.posts.push(post);
       this.postsUpdated.next([...this.posts]);
