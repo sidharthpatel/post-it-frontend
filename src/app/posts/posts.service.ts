@@ -14,20 +14,18 @@ export class PostsService{
   constructor(private http: HttpClient) {
 
   }
-
+  /**
+   * Objects in typescript and javascript are of reference type.
+   * When you copy reference types, you are copying the address in memory, not the object itself.
+   * To make a true copy of the posts, we will use the Spread Operator.
+   * Spread Operator:
+   * [] - creates a new array.
+   * ... - Takes all the elements of another array and adds it to the new array.
+   * It will also prevent any changes to the original array mentioned above.
+   */
+  
   getPosts() {
-    /**
-     * Objects in typescript and javascript are of reference type.
-     * When you copy reference types, you are copying the address in memory, not the object itself.
-     * To make a true copy of the posts, we will use the Spread Operator.
-     * Spread Operator:
-     * [] - creates a new array.
-     * ... - Takes all the elements of another array and adds it to the new array.
-     * It will also prevent any changes to the original array mentioned above.
-     */
-    // return [...this.posts];
-
-    this.http.get<{message: string, posts: any}>('http://localhost:3000/api/posts')
+    this.http.get<{message: string; posts: any}>('http://localhost:3000/api/posts')
     .pipe(map((postData) => {
       return postData.posts.map(post => {
         return {
@@ -41,6 +39,7 @@ export class PostsService{
       this.posts = transformedPost;
       this.postsUpdated.next([...this.posts]);
     });
+    // return [...this.posts];
   }
 
   getPostUpdateListener() {

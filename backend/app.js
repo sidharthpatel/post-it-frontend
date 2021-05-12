@@ -23,7 +23,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 
 app.use((request, response, next) => {
-  console.log('First middleware');
+  // console.log('First middleware');
   /* With the help of next function, the request can continue it's journey. */
   next();
 });
@@ -65,7 +65,7 @@ app.post("/api/posts", (request, response, next) => {
  * Only the /api/posts requests will be handled by our backend.
  * /api is to ensure we are dealing with ONLY the REST api requests.
  */
-app.use('/api/posts', (request, response, next) => {
+app.get('/api/posts', (request, response, next) => {
   // response.send("Hello from express!");
   Post.find().then(documents => {
     response.status(200).json({
