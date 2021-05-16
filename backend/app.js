@@ -54,7 +54,12 @@ app.post("/api/posts", (request, response, next) => {
     content: request.body.content
   });
   /** Default Mongoose method */
-  post.save();
+  post.save().then(createdPost => {
+    response.status(201).json({
+      message:'Post added successfully!',
+      postId:createdPost._id
+    })
+  });
   /** Status code means everything is okay and a new resource was created. */
   response.status(201).json({
     message: 'Post added successfully'
