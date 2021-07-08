@@ -5,6 +5,12 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+You can add `--open` to automatically navigate to the `http://localhost:4200/` address.
+
+## Backend Server
+Run `npm run start:server` to run the backend nodemon server.
+This server will automatically connect to an active mongoDB database and return `connection successful` in the terminal.
+If the database connection fails, it will return `connection failed`.
 
 ## Code scaffolding
 
