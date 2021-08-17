@@ -2,7 +2,7 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.0.5.
 
-## Development server
+## Development Server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 You can add `--open` to automatically navigate to the `http://localhost:4200/` address.
@@ -11,6 +11,15 @@ You can add `--open` to automatically navigate to the `http://localhost:4200/` a
 Run `npm run start:server` to run the backend nodemon server.
 This server will automatically connect to an active mongoDB database and return `connection successful` in the terminal.
 If the database connection fails, it will return `connection failed`.
+
+## Backend Database
+
+### Connecting Node/ Express App to MongoDB
+
+1. Create an account in MongoDB. (Note: The MongoDB Atlas should be free to a certain extent.)
+2. Generate a cluster to store collections of database.
+   *  A cluster can be thought of as a server dedicated to your DB collection.
+* 
 
 ## Code scaffolding
 
