@@ -29,7 +29,7 @@ export class PostCreateComponent implements OnInit{
   /**
    * Saves the fetched post from service with the help of postId.
    */
-  private post: Post;
+  post: Post;
 
   constructor(public postsService: PostsService, public route: ActivatedRoute) {}
 
