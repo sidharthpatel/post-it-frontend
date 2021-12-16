@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Post } from '../post.model';
 import { PostsService } from '../posts.service';
 
 @Component({
@@ -8,11 +9,52 @@ import { PostsService } from '../posts.service';
   templateUrl: './post-create.component.html',
   styleUrls: ['./post-create.component.css']
 })
-export class PostCreateComponent {
+export class PostCreateComponent implements OnInit{
   enteredTitle = '';
   enteredContent = '';
 
-  constructor(public postsService: PostsService) {}
+  /**
+   * Variable to track two modes: create & edit.
+   * create: variable is set to `create` if a post is newly generated component.
+   * edit: variable is set to `edit` if its an existing post which needs to be editted/ updated.
+   * @default `create`
+   */
+  private mode = 'create';
+
+  /**
+   * Saves the postId fetched from the onInit function to search from the list of posts.
+   */
+  private postId: string;
+
+  /**
+   * Saves the fetched post from service with the help of postId.
+   */
+  private post: Post;
+
+  constructor(public postsService: PostsService, public route: ActivatedRoute) {}
+
+  /**
+   * `paramMap` is an observable. Observables pass information between different parts of your application.
+   * This obervable fetches parameters from the url link whilst we are on the posts page.
+   * Pro: avoids unnecessary re-rendering of the entire component.
+   * `subscribe()` is a means to activate the observable.
+   * All built in observables never need to unsubscribe.
+   * 
+   * @returns paramMap.get(...) string
+   */
+  ngOnInit() {
+    this.route.paramMap.subscribe((paramMap: ParamMap) => {
+      if(paramMap.has('postId')) {
+        this.mode = 'edit';
+        this.postId = paramMap.get('postId');
+        this.post = this.postsService.getPost(this.postId);
+      }
+      else {
+        this.mode = 'create';
+        this.postId = null;
+      }
+    });
+  }
 
   onAddPost(form: NgForm) {
     if(form.invalid) {

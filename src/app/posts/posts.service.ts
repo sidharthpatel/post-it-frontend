@@ -38,6 +38,10 @@ export class PostsService{
     });
   }
 
+  getPost(id: string) {
+    return {...this.posts.find(p => p.id === id)};
+  }
+
   getPostUpdateListener() {
     /* asObservable method allows you to listen, but prevent you from emitting. */
     return this.postsUpdated.asObservable();
