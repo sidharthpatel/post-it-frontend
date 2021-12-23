@@ -1,32 +1,35 @@
 <mat-card>
-  <form (submit)='onAddPost(postForm)' #postForm='ngForm'>
+  <form (submit)="onSavePost(postForm)" #postForm="ngForm">
     <mat-form-field>
+      <!-- ngModel fetches post.title from the get go, but we might not have data to fetch leading "undefined" data.
+        To fix this, we can use the Elvis Operator which is a `?`. It checks whether the post exists before fetching the title. -->
       <input
         matInput
-        type='text'
-        name='title'
-        [ngModel]="post.title"
+        type="text"
+        name="title"
+        [ngModel]="post?.title"
         required
         minlength="3"
         placeholder="Post Title"
-        #title='ngModel'>
+        #title="ngModel"
+      />
       <mat-error *ngIf="title.invalid">Please enter a post title.</mat-error>
     </mat-form-field>
 
     <mat-form-field>
       <textarea
-        rows='4'
+        rows="4"
         matInput
-        name='content'
-        [ngModel]='post.content'
+        name="content"
+        [ngModel]="post?.content"
         required
         placeholder="Post Content"
-        #content='ngModel'></textarea>
-      <mat-error *ngIf="content.invalid">Please enter a post content.</mat-error>
+        #content="ngModel"
+      ></textarea>
+      <mat-error *ngIf="content.invalid"
+        >Please enter a post content.</mat-error
+      >
     </mat-form-field>
-    <button
-      mat-raised-button
-      color='accent'
-      type='submit'>Save Post!</button>
+    <button mat-raised-button color="accent" type="submit">Save Post!</button>
   </form>
 </mat-card>
