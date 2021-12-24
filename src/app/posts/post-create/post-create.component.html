@@ -1,5 +1,6 @@
 <mat-card>
-  <form (submit)="onSavePost(postForm)" #postForm="ngForm">
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <form (submit)="onSavePost(postForm)" #postForm="ngForm" *ngIf="!isLoading">
     <mat-form-field>
       <!-- ngModel fetches post.title from the get go, but we might not have data to fetch leading "undefined" data.
         To fix this, we can use the Elvis Operator which is a `?`. It checks whether the post exists before fetching the title. -->

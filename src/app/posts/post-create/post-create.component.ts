@@ -14,6 +14,10 @@ export class PostCreateComponent implements OnInit {
   enteredContent = '';
 
   /**
+   * Boolean to keep track of spinner loading and unloading.
+   */
+  isLoading = false;
+  /**
    * Variable to track two modes: create & edit.
    * create: variable is set to `create` if a post is newly generated component.
    * edit: variable is set to `edit` if its an existing post which needs to be editted/ updated.
@@ -50,8 +54,19 @@ export class PostCreateComponent implements OnInit {
       if (paramMap.has('postId')) {
         this.mode = 'edit';
         this.postId = paramMap.get('postId');
-        this.postsService.getPost(this.postId).subscribe(postData => {
-          this.post = {id: postData._id, title: postData.title, content: postData.content};
+
+        // Creates a spinner to represent posts being fetched.
+        this.isLoading = true;
+
+        this.postsService.getPost(this.postId).subscribe((postData) => {
+
+          // Unloads the spinner once the posts are fetched.
+          this.isLoading = false;
+          this.post = {
+            id: postData._id,
+            title: postData.title,
+            content: postData.content,
+          };
         });
       } else {
         this.mode = 'create';
@@ -64,6 +79,7 @@ export class PostCreateComponent implements OnInit {
     if (form.invalid) {
       return;
     }
+    this.isLoading = true;
     if (this.mode === 'create') {
       this.postsService.addPosts(form.value.title, form.value.content);
     } else {
