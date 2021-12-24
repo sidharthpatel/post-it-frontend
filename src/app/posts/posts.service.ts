@@ -94,6 +94,9 @@ export class PostsService {
         updatedPosts[oldPostIndex] = post;
         this.posts = updatedPosts;
         this.postsUpdated.next([...this.posts]);
+
+        //Once the post is updated, this segment of code will re-direct page to root path where the user can see the updated post.
+        this.router.navigate(['/']);
       });
   }
 
