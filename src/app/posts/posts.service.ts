@@ -4,13 +4,19 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
 import { Post } from './post.model';
+import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class PostsService {
   private posts: Post[] = [];
   private postsUpdated = new Subject<Post[]>();
 
-  constructor(private http: HttpClient) {}
+  /**
+   * Constructor that will be called upon execution of the application.
+   * @param http Gets data from the update or created post and add it to the backend.
+   * @param router Injects router to redirect the page to messages or all the available posts after creating or updating a post.
+   */
+  constructor(private http: HttpClient, private router: Router) {}
   /**
    * Objects in typescript and javascript are of reference type.
    * When you copy reference types, you are copying the address in memory, not the object itself.
@@ -65,6 +71,9 @@ export class PostsService {
         post.id = id;
         this.posts.push(post);
         this.postsUpdated.next([...this.posts]);
+
+        // Re-routes the user back to root page, so he can see the post that was newly generated or updated.
+        this.router.navigate(['/']);
       });
   }
 
