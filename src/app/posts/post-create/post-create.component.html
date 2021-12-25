@@ -1,20 +1,11 @@
 <mat-card>
   <mat-spinner *ngIf="isLoading"></mat-spinner>
-  <form (submit)="onSavePost(postForm)" #postForm="ngForm" *ngIf="!isLoading">
+  <form [formGroup]="form" (submit)="onSavePost()" *ngIf="!isLoading">
     <mat-form-field>
       <!-- ngModel fetches post.title from the get go, but we might not have data to fetch leading "undefined" data.
         To fix this, we can use the Elvis Operator which is a `?`. It checks whether the post exists before fetching the title. -->
-      <input
-        matInput
-        type="text"
-        name="title"
-        [ngModel]="post?.title"
-        required
-        minlength="3"
-        placeholder="Post Title"
-        #title="ngModel"
-      />
-      <mat-error *ngIf="title.invalid">Please enter a post title.</mat-error>
+      <input matInput type="text" formControlName="title" placeholder="Post Title" />
+      <mat-error *ngIf="form.get('title').invalid">Please enter a post title.</mat-error>
     </mat-form-field>
 
     <div>
@@ -29,13 +20,11 @@
       <textarea
         rows="4"
         matInput
+        formControlName="content"
         name="content"
-        [ngModel]="post?.content"
-        required
         placeholder="Post Content"
-        #content="ngModel"
       ></textarea>
-      <mat-error *ngIf="content.invalid"
+      <mat-error *ngIf="form.get('content').invalid"
         >Please enter a post content.</mat-error
       >
     </mat-form-field>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+// import { NgForm } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Post } from '../post.model';
 import { PostsService } from '../posts.service';
@@ -17,6 +18,12 @@ export class PostCreateComponent implements OnInit {
    * Boolean to keep track of spinner loading and unloading.
    */
   isLoading = false;
+
+  /**
+   * Generating dynamic form variable to store posts
+   */
+  form: FormGroup;
+
   /**
    * Variable to track two modes: create & edit.
    * create: variable is set to `create` if a post is newly generated component.
@@ -50,6 +57,13 @@ export class PostCreateComponent implements OnInit {
    * @returns paramMap.get(...) string
    */
   ngOnInit() {
+    this.form = new FormGroup({
+      "title": new FormControl(null, {
+        validators: [Validators.required, Validators.minLength(3)],
+      }),
+      "content": new FormControl(null, { validators: [Validators.required] }),
+    });
+
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
       if (paramMap.has('postId')) {
         this.mode = 'edit';
@@ -59,7 +73,6 @@ export class PostCreateComponent implements OnInit {
         this.isLoading = true;
 
         this.postsService.getPost(this.postId).subscribe((postData) => {
-
           // Unloads the spinner once the posts are fetched.
           this.isLoading = false;
           this.post = {
@@ -67,6 +80,10 @@ export class PostCreateComponent implements OnInit {
             title: postData.title,
             content: postData.content,
           };
+          this.form.setValue({
+            "title": this.post.title,
+            "content": this.post.content,
+          });
         });
       } else {
         this.mode = 'create';
@@ -75,20 +92,24 @@ export class PostCreateComponent implements OnInit {
     });
   }
 
-  onSavePost(form: NgForm) {
-    if (form.invalid) {
+  /**
+   * Since we are converting our forms from template-based to dynamic, we do not use NgForm anymore to input data onSave.
+   */
+  onSavePost(/*form: NgForm*/) {
+    if (this.form.invalid) {
       return;
     }
     this.isLoading = true;
     if (this.mode === 'create') {
-      this.postsService.addPosts(form.value.title, form.value.content);
+      this.postsService.addPosts(this.form.value.title, this.form.value.content);
     } else {
       this.postsService.updatePost(
         this.postId,
-        form.value.title,
-        form.value.content
+        this.form.value.title,
+        this.form.value.content
       );
     }
-    form.resetForm();
+    // form.resetForm();
+    this.form.reset();
   }
 }
