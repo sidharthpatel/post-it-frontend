@@ -62,6 +62,7 @@ export class PostCreateComponent implements OnInit {
         validators: [Validators.required, Validators.minLength(3)],
       }),
       "content": new FormControl(null, { validators: [Validators.required] }),
+      "image": new FormControl(null, {validators: [Validators.required]}),
     });
 
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
@@ -90,6 +91,17 @@ export class PostCreateComponent implements OnInit {
         this.postId = null;
       }
     });
+  }
+
+  /**
+   * One of the many benefits of reactive-form approach is that you are not limited to storing text in your form.
+   */
+  onImagePicked(event: Event) {
+    // File that the user selected.
+    const file = (event.target as HTMLInputElement).files[0];
+    this.form.patchValue({image: file});
+    // Lets angular know that you changed the value.
+    this.form.get('image').updateValueAndValidity();
   }
 
   /**
