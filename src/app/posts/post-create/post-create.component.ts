@@ -24,6 +24,8 @@ export class PostCreateComponent implements OnInit {
    */
   form: FormGroup;
 
+  imagePreview: string;
+
   /**
    * Variable to track two modes: create & edit.
    * create: variable is set to `create` if a post is newly generated component.
@@ -102,6 +104,12 @@ export class PostCreateComponent implements OnInit {
     this.form.patchValue({image: file});
     // Lets angular know that you changed the value.
     this.form.get('image').updateValueAndValidity();
+    // Converting image text into data url.
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagePreview = reader.result as string;
+    };
+    reader.readAsDataURL(file);
   }
 
   /**
