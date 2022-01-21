@@ -5,6 +5,9 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Post } from '../post.model';
 import { PostsService } from '../posts.service';
 
+// Importing Mime type validtor to ensure that the uploaded object is a JPG
+import { mimeType } from './mime-type.validator';
+
 @Component({
   selector: 'app-post-create',
   templateUrl: './post-create.component.html',
@@ -60,11 +63,14 @@ export class PostCreateComponent implements OnInit {
    */
   ngOnInit() {
     this.form = new FormGroup({
-      "title": new FormControl(null, {
+      title: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(3)],
       }),
-      "content": new FormControl(null, { validators: [Validators.required] }),
-      "image": new FormControl(null, {validators: [Validators.required]}),
+      content: new FormControl(null, { validators: [Validators.required] }),
+      image: new FormControl(null, {
+        validators: [Validators.required],
+        asyncValidators: [mimeType],
+      }),
     });
 
     this.route.paramMap.subscribe((paramMap: ParamMap) => {
@@ -84,8 +90,8 @@ export class PostCreateComponent implements OnInit {
             content: postData.content,
           };
           this.form.setValue({
-            "title": this.post.title,
-            "content": this.post.content,
+            title: this.post.title,
+            content: this.post.content,
           });
         });
       } else {
@@ -101,7 +107,7 @@ export class PostCreateComponent implements OnInit {
   onImagePicked(event: Event) {
     // File that the user selected.
     const file = (event.target as HTMLInputElement).files[0];
-    this.form.patchValue({image: file});
+    this.form.patchValue({ image: file });
     // Lets angular know that you changed the value.
     this.form.get('image').updateValueAndValidity();
     // Converting image text into data url.
@@ -121,7 +127,10 @@ export class PostCreateComponent implements OnInit {
     }
     this.isLoading = true;
     if (this.mode === 'create') {
-      this.postsService.addPosts(this.form.value.title, this.form.value.content);
+      this.postsService.addPosts(
+        this.form.value.title,
+        this.form.value.content
+      );
     } else {
       this.postsService.updatePost(
         this.postId,
