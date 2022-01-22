@@ -36,6 +36,7 @@ export class PostsService {
               title: post.title,
               content: post.content,
               id: post._id,
+              imagePath: post.imagePath,
             };
           });
         })
@@ -59,16 +60,26 @@ export class PostsService {
     );
   }
 
-  addPosts(title: string, content: string) {
-    const post: Post = { id: null, title: title, content: content };
+  /** Editing add posts function because up to this point, we were adding content through Json or text-based format, but file uploads do not work that way */
+  addPosts(title: string, content: string, image: File) {
+    // Provided by JS. FormData is a data format which allows us to combine text & blob (file) values.
+    const postData = new FormData();
+    postData.append('title', title);
+    postData.append('content', content);
+    // Params: field name, content, alternative text to refer to the content. Similar to HTML img tag with src and alt.
+    postData.append('image', image, title);
     this.http
-      .post<{ message: string; postId: string }>(
+      .post<{ message: string; post: Post }>(
         'http://localhost:3000/api/posts',
-        post
+        postData
       )
       .subscribe((responseData) => {
-        const id = responseData.postId;
-        post.id = id;
+        const post: Post = {
+          id: responseData.post.id,
+          title: title,
+          content: content,
+          imagePath: responseData.post.imagePath,
+        };
         this.posts.push(post);
         this.postsUpdated.next([...this.posts]);
 
@@ -82,7 +93,7 @@ export class PostsService {
    */
   updatePost(id: string, title: string, content: string) {
     // post to be inserted in the post list
-    const post: Post = { id: id, title: title, content: content };
+    const post: Post = { id: id, title: title, content: content, imagePath: null };
     this.http
       .put('http://localhost:3000/api/posts/' + id, post)
       .subscribe((response) => {

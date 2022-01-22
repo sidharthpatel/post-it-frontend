@@ -25,7 +25,7 @@ const storage = multer.diskStorage({
   destination: (req, file, callback) => {
     // Security measure if file type does not match MIME_TYPE_MAP by throwing error
     const isValid = MIME_TYPE_MAP[file.mimetype];
-    let error = new Error("Invalid mim type");
+    let error = new Error("Invalid mime type");
     if (isValid) {
       error = null;
     }
@@ -45,20 +45,39 @@ const storage = multer.diskStorage({
  * multer(storage).single('image')
  * Multer will try to extract a single file from the incoming request and will try to find it in the 'image' property in the request body.
  */
-router.post("", multer(storage).single("image"), (request, response, next) => {
-  /* One post */
-  const post = new Post({
-    title: request.body.title,
-    content: request.body.content,
-  });
-  /** Default Mongoose method */
-  post.save().then((createdPost) => {
-    response.status(201).json({
-      message: "Post added successfully!",
-      postId: createdPost._id,
+router.post(
+  "",
+  multer({ storage: storage }).single("image"),
+  (request, response, next) => {
+    /**
+     * URL to the image file.
+     * request.protocol: Returns the type of protocol you are using ('http/https')
+     */
+    const url = request.protocol + "://" + request.get("host");
+
+    /* One post */
+    const post = new Post({
+      title: request.body.title,
+      content: request.body.content,
+      /* request.file: Property provided by Multer to extract file's name. */
+      imagePath: url + "/images/" + request.file.filename,
     });
-  });
-});
+    /** Default Mongoose method */
+    post.save().then((createdPost) => {
+      response.status(201).json({
+        message: "Post added successfully!",
+        postId: createdPost._id,
+        post: {
+          ...createdPost,
+          id: createdPost._id,
+          // title: createdPost.title,
+          // content: createdPost.content,
+          // imagePath: createdPost.imagePath,
+        },
+      });
+    });
+  }
+);
 
 /**
  * `Put` will delete the existing resource/post and generate a new resource/post

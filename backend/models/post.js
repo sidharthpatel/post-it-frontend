@@ -1,12 +1,13 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-/** 
+/**
  * Passing JS object.
  * In Node.js & js in general, string is String with capital S. In Ts it does not matter.
  */
 const postSchema = mongoose.Schema({
-    title: { type: String, required: true },
-    content: { type: String, required: true }
+  title: { type: String, required: true },
+  content: { type: String, required: true },
+  imagePath: { type: String, required: true },
 });
 
 /**
@@ -14,4 +15,4 @@ const postSchema = mongoose.Schema({
  * the name should start with upper case letter.
  * module.exports will export the schema outside this file.
  */
-module.exports = mongoose.model('Post', postSchema);
+module.exports = mongoose.model("Post", postSchema);
