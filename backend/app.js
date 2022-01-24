@@ -1,3 +1,4 @@
+const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -8,7 +9,7 @@ const app = express();
 
 mongoose
   .connect(
-    "mongodb+srv://sid:aDPZoiKHnPS60fX4@cluster0.8cx44.mongodb.net/node-angular?retryWrites=true&w=majority"
+    "mongodb+srv://sid:ACCwT49G7tquH49E@cluster0.8cx44.mongodb.net/node-angular?retryWrites=true&w=majority"
   )
   .then(() => {
     console.log("Database Connection Successful!");
@@ -20,6 +21,12 @@ mongoose
 app.use(bodyParser.json());
 /* Only support default URL features. */
 app.use(bodyParser.urlencoded({ extended: false }));
+
+/**
+ * Allows access to any folder with /images
+ * Any request going to /images is re-routed to backend/images
+ */
+app.use("/images", express.static(path.join("backend/images")));
 
 /* Middle ware to deal with CORS problem. ** Details in Server.js file. ** */
 /**

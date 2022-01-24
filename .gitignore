@@ -46,3 +46,6 @@ testem.log
 Thumbs.db
 
 .vscode/
+
+# Backend image data save
+backend/images/
