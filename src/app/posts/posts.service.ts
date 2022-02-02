@@ -55,9 +55,12 @@ export class PostsService {
   getPost(id: string) {
     // Expliciting defining the get method to return the type of data to get back.
     // In this case, an ID, Title, and Content.
-    return this.http.get<{ _id: string; title: string; content: string }>(
-      'http://localhost:3000/api/posts/' + id
-    );
+    return this.http.get<{
+      _id: string;
+      title: string;
+      content: string;
+      imagePath: string;
+    }>('http://localhost:3000/api/posts/' + id);
   }
 
   /** Editing add posts function because up to this point, we were adding content through Json or text-based format, but file uploads do not work that way */
@@ -90,16 +93,39 @@ export class PostsService {
 
   /**
    * Updates post upon editing it.
+   * Defined image param such that it can either be of type File or String
    */
-  updatePost(id: string, title: string, content: string) {
+  updatePost(id: string, title: string, content: string, image: File | string) {
     // post to be inserted in the post list
-    const post: Post = { id: id, title: title, content: content, imagePath: null };
+    let postData: Post | FormData;
+    const post: Post = {
+      id: id,
+      title: title,
+      content: content,
+      imagePath: null,
+    };
+    if (typeof image === 'object') {
+      postData = new FormData();
+      postData.append('id', id);
+      postData.append('title', title);
+      postData.append('content', content);
+      postData.append('image', image, title);
+    } else {
+      postData = { id: id, title: title, content: content, imagePath: image };
+    }
     this.http
-      .put('http://localhost:3000/api/posts/' + id, post)
+      .put('http://localhost:3000/api/posts/' + id, postData)
       .subscribe((response) => {
         // Cloned verison of original posts
         const updatedPosts = [...this.posts];
-        const oldPostIndex = updatedPosts.findIndex((p) => p.id === post.id);
+        const oldPostIndex = updatedPosts.findIndex((p) => p.id === id);
+        const post: Post = {
+          id: id,
+          title: title,
+          content: content,
+          // We get back image path from the server since we would have new image that would have changed the imagepath.
+          imagePath: '',
+        };
 
         // Replace old post with new post
         updatedPosts[oldPostIndex] = post;

@@ -84,17 +84,29 @@ router.post(
  * You can also use `patch` which will simply replace the resource.
  * Put will basically update the database.
  */
-router.put("/:id", (req, res, next) => {
-  const newPost = new Post({
-    _id: req.body.id,
-    title: req.body.title,
-    content: req.body.content,
-  });
-  Post.updateOne({ _id: req.params.id }, newPost).then((result) => {
-    console.log(result);
-    res.status(200).json({ message: "Update successful!" });
-  });
-});
+router.put(
+  "/:id",
+  multer({ storage: storage }).single("image"),
+  (req, res, next) => {
+    //Default image path naming convention
+    let imagePath = req.body.imagePath;
+    if(req.file) {
+      const url = req.protocol + "://" + req.get("host");
+      imagePath = url + "images/" + req.file.filename
+    }
+    const newPost = new Post({
+      _id: req.body.id,
+      title: req.body.title,
+      content: req.body.content,
+      imagePath: imagePath,
+    });
+    console.log(post);
+    Post.updateOne({ _id: req.params.id }, newPost).then((result) => {
+      console.log(result);
+      res.status(200).json({ message: "Update successful!" });
+    });
+  }
+);
 
 /**
  * Only the /api/posts requests will be handled by our backend.

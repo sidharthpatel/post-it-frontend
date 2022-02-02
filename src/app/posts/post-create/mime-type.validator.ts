@@ -1,9 +1,17 @@
 import { AbstractControl } from '@angular/forms';
-import { Observable, Observer } from 'rxjs';
+import { Observable, Observer, of } from 'rxjs';
+
+/**
+ * Of is a quick and easy way of adding or creating an observable which will emit data immediately.
+ */
 
 export const mimeType = (
   control: AbstractControl
 ): Promise<{ [key: string]: any }> | Observable<{ [key: string]: any }> => {
+  // Hard-code way to return valid for any image path. 
+  if(typeof(control.value) === "string") {
+    return of(null);
+  }
   const file = control.value as File;
   const fileReader = new FileReader();
   const frObs = Observable.create(
