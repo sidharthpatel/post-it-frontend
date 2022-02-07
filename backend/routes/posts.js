@@ -118,16 +118,28 @@ router.get("", (request, response, next) => {
   const pageSize = +request.query.pagesize;
   const currentPage = +request.query.page;
   const postQuery = Post.find();
+
+  let fetchedPosts;
+
   if(pageSize && currentPage) {
     postQuery.skip(pageSize * (currentPage - 1))
     .limit(pageSize);
   }
 
+  /**
+   * First, I am fetching all the posts,
+   * Then I am issuing another query to get the number of posts.
+   */
   postQuery.then((documents) => {
+    fetchedPosts = documents;
+    return Post.count();
+  })
+  .then(count => {
     response.status(200).json({
-      message: "Posts fetched successfully!",
-      posts: documents,
-    });
+      message: "Posts fetched successfully",
+      posts: fetchedPosts,
+      maxPosts: count,
+    })
   });
 });
 
