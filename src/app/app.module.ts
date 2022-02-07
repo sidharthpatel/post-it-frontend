@@ -16,6 +16,7 @@ import { HeaderComponent } from './header/header.component';
 import { PostListComponent } from './posts/post-list/post-list.component';
 import { PostsService } from './posts/posts.service';
 import { AppRoutingModule } from './app-routing.module';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import { AppRoutingModule } from './app-routing.module';
     MatExpansionModule,
     HttpClientModule,
     MatProgressSpinnerModule,
+    MatPaginatorModule,
   ],
   providers: [PostsService],
   bootstrap: [AppComponent],

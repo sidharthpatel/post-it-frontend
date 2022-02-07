@@ -113,7 +113,17 @@ router.put(
  * /api is to ensure we are dealing with ONLY the REST api requests.
  */
 router.get("", (request, response, next) => {
-  Post.find().then((documents) => {
+  //Generating API that works with the given const/ query params below.
+  // + converts the query string into integer.
+  const pageSize = +request.query.pagesize;
+  const currentPage = +request.query.page;
+  const postQuery = Post.find();
+  if(pageSize && currentPage) {
+    postQuery.skip(pageSize * (currentPage - 1))
+    .limit(pageSize);
+  }
+
+  postQuery.then((documents) => {
     response.status(200).json({
       message: "Posts fetched successfully!",
       posts: documents,

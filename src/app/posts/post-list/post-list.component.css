@@ -6,10 +6,13 @@
   text-align: center;
 }
 mat-spinner {
-  margin:auto;
+  margin: auto;
 }
 .post-image {
   width: 100%;
+}
+mat-paginator {
+  margin-bottom: 1rem;
 }
 
 .post-image img {
