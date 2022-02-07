@@ -26,9 +26,14 @@ export class PostsService {
    * It will also prevent any changes to the original array mentioned above.
    */
 
-  getPosts() {
+  getPosts(postsPerPage: number, currentPage: number) {
+    /**
+     * `` -> means its a template expression.
+     */
+    const queryParams = `?pagesize=${postsPerPage}&page=${currentPage}`;
+
     this.http
-      .get<{ message: string; posts: any }>('http://localhost:3000/api/posts')
+      .get<{ message: string; posts: any }>('http://localhost:3000/api/posts' + queryParams)
       .pipe(
         map((postData) => {
           return postData.posts.map((post) => {
