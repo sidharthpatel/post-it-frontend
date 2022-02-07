@@ -90,15 +90,6 @@ export class PostsService {
         postData
       )
       .subscribe((responseData) => {
-        const post: Post = {
-          id: responseData.post.id,
-          title: title,
-          content: content,
-          imagePath: responseData.post.imagePath,
-        };
-        this.posts.push(post);
-        this.postsUpdated.next([...this.posts]);
-
         // Re-routes the user back to root page, so he can see the post that was newly generated or updated.
         this.router.navigate(['/']);
       });
@@ -129,34 +120,16 @@ export class PostsService {
     this.http
       .put('http://localhost:3000/api/posts/' + id, postData)
       .subscribe((response) => {
-        // Cloned verison of original posts
-        const updatedPosts = [...this.posts];
-        const oldPostIndex = updatedPosts.findIndex((p) => p.id === id);
-        const post: Post = {
-          id: id,
-          title: title,
-          content: content,
-          // We get back image path from the server since we would have new image that would have changed the imagepath.
-          imagePath: '',
-        };
-
-        // Replace old post with new post
-        updatedPosts[oldPostIndex] = post;
-        this.posts = updatedPosts;
-        this.postsUpdated.next([...this.posts]);
-
         //Once the post is updated, this segment of code will re-direct page to root path where the user can see the updated post.
         this.router.navigate(['/']);
       });
   }
 
+  /**
+   * Delete and refresh posts.
+   */
   deletePost(postId: string) {
-    this.http
-      .delete('http://localhost:3000/api/posts/' + postId)
-      .subscribe(() => {
-        const updatedPosts = this.posts.filter((post) => post.id !== postId);
-        this.posts = updatedPosts;
-        this.postsUpdated.next([...this.posts]);
-      });
+    return this.http
+      .delete('http://localhost:3000/api/posts/' + postId);
   }
 }
