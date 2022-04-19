@@ -2,7 +2,7 @@
  * User.js file is a backend file to authenticate user email and password fetched from frontend and add it to the database for future retrieval of data.
  */
 const express = require("express");
-const user = require("../models/user");
+const User = require("../models/user");
 const router = express.Router();
 
 const bcrpyt = require("bcrypt");
