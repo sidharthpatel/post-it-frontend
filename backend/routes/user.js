@@ -40,6 +40,7 @@ router.post("/signup", (req, res, next) => {
  * Generate token on this route.
  */
 router.post("/login", (req, res, next) => {
+  let fetchedUser;
   User.findOne({ email: req.body.email })
     .then((user) => {
       if (!user) {
@@ -47,6 +48,7 @@ router.post("/login", (req, res, next) => {
           message: "Auth Failed",
         });
       }
+      fetchedUser = user;
       return bcrpyt.compare(req.body.password, user.password);
     })
     .then((result) => {
@@ -57,13 +59,11 @@ router.post("/login", (req, res, next) => {
       }
       /* Creates a new token */
       const token = jwt.sign(
-        {
-          email: user.email,
-          userId: user._id,
-        },
+        { email: fetchedUser.email, userId: fetchedUser._id },
         "secret_this_should_be_longer",
         { expiresIn: "1h" }
       );
+      res.status(200).json({ token: token, message: "Generated Token" });
     })
     .catch((err) => {
       return res.status(401).then({
