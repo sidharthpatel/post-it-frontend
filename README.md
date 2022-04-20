@@ -31,11 +31,11 @@ SPA contains backend with some routes. Typically you'd send request as an Http r
 
 ### How do we store autentication then?
 
-* I will store auth information using token, specifically `Json Web Token (JWT)`.
-* Think of JWT as `package of information` generated on a server upon successful login.
-* The token is then sent back to the browser where you can store it in the angular app (cookie/local storage).
-* This token is then attached to all future requests.
-* Token is hashed so it will not be faked. Now the requests with the valid token will only be allowed access.
+- I will store auth information using token, specifically `Json Web Token (JWT)`.
+- Think of JWT as `package of information` generated on a server upon successful login.
+- The token is then sent back to the browser where you can store it in the angular app (cookie/local storage).
+- This token is then attached to all future requests.
+- Token is hashed so it will not be faked. Now the requests with the valid token will only be allowed access.
 
 ## Code scaffolding
 
