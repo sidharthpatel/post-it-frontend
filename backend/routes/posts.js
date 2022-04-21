@@ -6,6 +6,8 @@ const express = require("express");
 
 const Post = require("../models/post");
 
+const checkAuth = require("../middleware/check-auth");
+
 /**
  * Initializing express router (comes built-in with express)
  */
@@ -47,6 +49,9 @@ const storage = multer.diskStorage({
  */
 router.post(
   "",
+  /** checkAuth will be passed as reference (no need to add params).
+   * Express will take care of automatically passing in arguments to the variable when it enters the middleware. */
+  checkAuth,
   multer({ storage: storage }).single("image"),
   (request, response, next) => {
     /**
@@ -90,9 +95,9 @@ router.put(
   (req, res, next) => {
     //Default image path naming convention
     let imagePath = req.body.imagePath;
-    if(req.file) {
+    if (req.file) {
       const url = req.protocol + "://" + req.get("host");
-      imagePath = url + "images/" + req.file.filename
+      imagePath = url + "images/" + req.file.filename;
     }
     const newPost = new Post({
       _id: req.body.id,
@@ -121,26 +126,26 @@ router.get("", (request, response, next) => {
 
   let fetchedPosts;
 
-  if(pageSize && currentPage) {
-    postQuery.skip(pageSize * (currentPage - 1))
-    .limit(pageSize);
+  if (pageSize && currentPage) {
+    postQuery.skip(pageSize * (currentPage - 1)).limit(pageSize);
   }
 
   /**
    * First, I am fetching all the posts,
    * Then I am issuing another query to get the number of posts.
    */
-  postQuery.then((documents) => {
-    fetchedPosts = documents;
-    return Post.count();
-  })
-  .then(count => {
-    response.status(200).json({
-      message: "Posts fetched successfully",
-      posts: fetchedPosts,
-      maxPosts: count,
+  postQuery
+    .then((documents) => {
+      fetchedPosts = documents;
+      return Post.count();
     })
-  });
+    .then((count) => {
+      response.status(200).json({
+        message: "Posts fetched successfully",
+        posts: fetchedPosts,
+        maxPosts: count,
+      });
+    });
 });
 
 router.get("/:id", (req, res, next) => {
@@ -154,7 +159,7 @@ router.get("/:id", (req, res, next) => {
   });
 });
 
-router.delete("/:id", (req, res, next) => {
+router.delete("/:id", checkAuth, (req, res, next) => {
   Post.deleteOne({ _id: req.params.id }).then((result) => {
     console.log(result);
     res.status(200).json({ message: "Post deleted!" });
