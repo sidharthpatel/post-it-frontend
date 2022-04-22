@@ -40,7 +40,7 @@ app.use((request, response, next) => {
   /** Any extra headers that may be blocked can also gain access */
   response.setHeader(
     "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
+    "Origin, X-Requested-With, Content-Type, Accept, authorization"
   );
   /** type of methods or http words can be used to send request */
   response.setHeader(
