@@ -36,7 +36,7 @@ const storage = multer.diskStorage({
     callback(error, "backend/images");
   },
   filename: (req, file, callback) => {
-    const name = file.originalname.toLocaleLowerCase().split(" ").join("-");
+    const name = file.originalname.toLowerCase().split(" ").join("-");
     const ext = MIME_TYPE_MAP[file.mimetype];
     callback(null, name + "-" + Date.now() + "." + ext);
   },
@@ -71,7 +71,6 @@ router.post(
     post.save().then((createdPost) => {
       response.status(201).json({
         message: "Post added successfully!",
-        postId: createdPost._id,
         post: {
           ...createdPost,
           id: createdPost._id,
@@ -91,6 +90,7 @@ router.post(
  */
 router.put(
   "/:id",
+  checkAuth,
   multer({ storage: storage }).single("image"),
   (req, res, next) => {
     //Default image path naming convention
@@ -99,14 +99,14 @@ router.put(
       const url = req.protocol + "://" + req.get("host");
       imagePath = url + "images/" + req.file.filename;
     }
-    const newPost = new Post({
+    const post = new Post({
       _id: req.body.id,
       title: req.body.title,
       content: req.body.content,
       imagePath: imagePath,
     });
     console.log(post);
-    Post.updateOne({ _id: req.params.id }, newPost).then((result) => {
+    Post.updateOne({ _id: req.params.id }, post).then((result) => {
       console.log(result);
       res.status(200).json({ message: "Update successful!" });
     });
