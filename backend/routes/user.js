@@ -63,7 +63,8 @@ router.post("/login", (req, res, next) => {
         "secret_this_should_be_longer",
         { expiresIn: "1h" }
       );
-      res.status(200).json({ token: token, message: "Generated Token" });
+      // expiresIn property sent in seconds as the amount of time referred above for the client will differ from that of the server.
+      res.status(200).json({ token: token, expiresIn: 3600, message: "Generated Token" });
     })
     .catch((err) => {
       return res.status(401).then({

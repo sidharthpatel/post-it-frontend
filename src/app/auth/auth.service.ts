@@ -8,6 +8,7 @@ import { AuthData } from './auth-data.model';
 export class AuthService {
   private isAutenticated = false;
   private token: string;
+  private tokenTimer: any;
   private authStatusListener = new Subject<boolean>();
 
   constructor(private http: HttpClient, private router: Router) {}
@@ -37,12 +38,14 @@ export class AuthService {
   login(email: string, password: string) {
     const authData: AuthData = { email: email, password: password };
     this.http
-      .post<{ token: string }>('http://localhost:3000/api/user/login', authData)
+      .post<{ token: string, expiresIn: number }>('http://localhost:3000/api/user/login', authData)
       .subscribe((response) => {
         const token = response.token;
         this.token = token;
         // Checks if the token exists
         if (token) {
+          const expiresInDuration = response.expiresIn;
+          this.tokenTimer = setTimeout(() => { this.logout(); }, expiresInDuration * 1000);
           this.isAutenticated = true;
           /** Notifies auth services dependencies that the user is authenticated. */
           this.authStatusListener.next(true);
@@ -60,5 +63,6 @@ export class AuthService {
     this.authStatusListener.next(false);
     // Navigates back to the home page
     this.router.navigate(['/']);
+    clearTimeout(this.tokenTimer);
   }
 }
