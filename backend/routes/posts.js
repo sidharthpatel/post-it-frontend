@@ -97,7 +97,7 @@ router.put(
     let imagePath = req.body.imagePath;
     if (req.file) {
       const url = req.protocol + "://" + req.get("host");
-      imagePath = url + "images/" + req.file.filename;
+      imagePath = url + "/images/" + req.file.filename;
     }
     const post = new Post({
       _id: req.body.id,
@@ -107,7 +107,6 @@ router.put(
     });
     console.log(post);
     Post.updateOne({ _id: req.params.id }, post).then((result) => {
-      console.log(result);
       res.status(200).json({ message: "Update successful!" });
     });
   }

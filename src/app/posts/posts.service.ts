@@ -77,7 +77,7 @@ export class PostsService {
   }
 
   /** Editing add posts function because up to this point, we were adding content through Json or text-based format, but file uploads do not work that way */
-  addPosts(title: string, content: string, image: File) {
+  addPost(title: string, content: string, image: File) {
     // Provided by JS. FormData is a data format which allows us to combine text & blob (file) values.
     const postData = new FormData();
     postData.append('title', title);
@@ -102,12 +102,6 @@ export class PostsService {
   updatePost(id: string, title: string, content: string, image: File | string) {
     // post to be inserted in the post list
     let postData: Post | FormData;
-    const post: Post = {
-      id: id,
-      title: title,
-      content: content,
-      imagePath: null,
-    };
     if (typeof image === 'object') {
       postData = new FormData();
       postData.append('id', id);

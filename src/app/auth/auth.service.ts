@@ -97,7 +97,6 @@ export class AuthService {
     this.clearAuthData();
     // Navigates back to the home page
     this.router.navigate(['/']);
-    clearTimeout(this.tokenTimer);
   }
 
   private setAuthTimer(duration: number) {
@@ -127,6 +126,6 @@ export class AuthService {
     return {
       token: token,
       expirationDate: new Date(expirationDate),
-    };
+    }
   }
 }

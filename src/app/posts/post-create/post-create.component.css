@@ -1,14 +1,10 @@
-mat-card {
-  width: 80%;
-  margin: auto;
-}
-
-mat-form-field, textarea {
+mat-form-field,
+textarea {
   width: 100%;
 }
 
 mat-spinner {
-  margin:auto;
+  margin: auto;
 }
 input[type="file"] {
   visibility: hidden;

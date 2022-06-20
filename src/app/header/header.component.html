@@ -1,5 +1,5 @@
 <mat-toolbar color="primary">
-  <span><a routerLink="/"> Messages </a></span>
+  <span><a routerLink="/"> MyMessages </a></span>
   <span class="spacer"></span>
   <ul>
     <li *ngIf="userIsAuthenticated">
@@ -7,18 +7,16 @@
         >New Post</a
       >
     </li>
-    <li>
+    <li *ngIf="!userIsAuthenticated">
       <a
-        *ngIf="!userIsAuthenticated"
         mat-button
         routerLink="/login"
         routerLinkActive="mat-accent"
         >Login</a
       >
     </li>
-    <li>
+    <li *ngIf="!userIsAuthenticated">
       <a
-        *ngIf="!userIsAuthenticated"
         mat-button
         routerLink="/signup"
         routerLinkActive="mat-accent"

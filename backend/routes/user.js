@@ -7,7 +7,6 @@ const router = express.Router();
 
 const bcrpyt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const user = require("../models/user");
 
 router.post("/signup", (req, res, next) => {
   bcrpyt.hash(req.body.password, 10).then((hash) => {
@@ -30,6 +29,7 @@ router.post("/signup", (req, res, next) => {
       })
       .catch((err) => {
         res.status(500).json({
+          message: "User Failed",
           error: err,
         });
       });
@@ -66,7 +66,7 @@ router.post("/login", (req, res, next) => {
       res.status(200).json({ token: token, expiresIn: 3600 });
     })
     .catch((err) => {
-      return res.status(401).then({
+      return res.status(401).json({
         message: "Auth Failed",
       });
     });
