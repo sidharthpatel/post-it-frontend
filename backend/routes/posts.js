@@ -66,6 +66,7 @@ router.post(
       content: request.body.content,
       /* request.file: Property provided by Multer to extract file's name. */
       imagePath: url + "/images/" + request.file.filename,
+      creator: request.userData.userId,
     });
     /** Default Mongoose method */
     post.save().then((createdPost) => {
@@ -74,9 +75,6 @@ router.post(
         post: {
           ...createdPost,
           id: createdPost._id,
-          // title: createdPost.title,
-          // content: createdPost.content,
-          // imagePath: createdPost.imagePath,
         },
       });
     });
