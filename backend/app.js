@@ -10,7 +10,9 @@ const app = express();
 
 mongoose
   .connect(
-    "mongodb+srv://sid:ACCwT49G7tquH49E@cluster0.8cx44.mongodb.net/node-angular?retryWrites=true&w=majority"
+    "mongodb+srv://sid:" +
+      process.env.MONGO_ATLAS_PW +
+      "@cluster0.8cx44.mongodb.net/node-angular?retryWrites=true&w=majority"
   )
   .then(() => {
     console.log("Database Connection Successful!");
@@ -29,7 +31,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
  */
 app.use("/images", express.static(path.join("backend/images")));
 
-/* Middle ware to deal with CORS problem. ** Details in Server.js file. ** */
+/* Middleware to deal with CORS problem. ** Details in Server.js file. */
+
+/** The CORS headers are not required if you are hosting the MEAN app as one combined application 
+ * composed of Angular (hosted on port 4200) and Node.js, Express, and MongoDB (hosted on port 3000) */
+
 /**
  * setHeader(key, value)
  * Our key is a browser identifier which will give access, but to what??

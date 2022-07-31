@@ -5,6 +5,9 @@ import { map } from 'rxjs/operators';
 
 import { Post } from './post.model';
 import { Router } from '@angular/router';
+import { environment } from 'src/environments/environment';
+
+const BACKEND_URL = environment.apiUrl + "/posts/";
 
 @Injectable({ providedIn: 'root' })
 export class PostsService {
@@ -34,7 +37,7 @@ export class PostsService {
 
     this.http
       .get<{ message: string; posts: any; maxPosts: number }>(
-        'http://localhost:3000/api/posts' + queryParams
+        BACKEND_URL + queryParams
       )
       .pipe(
         map((postData) => {
@@ -76,7 +79,7 @@ export class PostsService {
       content: string;
       imagePath: string;
       creator: string;
-    }>('http://localhost:3000/api/posts/' + id);
+    }>(BACKEND_URL + id);
   }
 
   /** Editing add posts function because up to this point, we were adding content through Json or text-based format, but file uploads do not work that way */
@@ -89,7 +92,7 @@ export class PostsService {
     postData.append('image', image, title);
     this.http
       .post<{ message: string; post: Post }>(
-        'http://localhost:3000/api/posts',
+        BACKEND_URL,
         postData
       )
       .subscribe((responseData) => {
@@ -115,7 +118,7 @@ export class PostsService {
       postData = { id: id, title: title, content: content, imagePath: image, creator: null };
     }
     this.http
-      .put('http://localhost:3000/api/posts/' + id, postData)
+      .put(BACKEND_URL + id, postData)
       .subscribe((response) => {
         //Once the post is updated, this segment of code will re-direct page to root path where the user can see the updated post.
         this.router.navigate(['/']);
@@ -127,6 +130,6 @@ export class PostsService {
    */
   deletePost(postId: string) {
     return this.http
-      .delete('http://localhost:3000/api/posts/' + postId);
+      .delete(BACKEND_URL + postId);
   }
 }
