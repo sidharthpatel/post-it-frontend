@@ -51,4 +51,4 @@ Thumbs.db
 # backend/images/
 
 # Ignore backend data
-backend/
+/.backend
