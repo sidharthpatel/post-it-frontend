@@ -10,7 +10,7 @@
 # dependencies
 /node_modules
 
-# ignoring backend
+#ignoring backend
 /backend
 
 # profiling files
@@ -49,3 +49,6 @@ testem.log
 Thumbs.db
 
 .vscode/
+
+#ignore compressed backend zip
+backend.zip
