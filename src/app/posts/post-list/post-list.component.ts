@@ -26,7 +26,7 @@ export class PostListComponent implements OnInit, OnDestroy {
 
   // Dummy value to define the number of posts for pagination.
   totalPosts = 0;
-  postsPerPage = 2;
+  postsPerPage = 10;
   currentPage = 1;
   pageSizeOptions = [1, 2, 5, 10];
   userIsAuthenticated = false;
