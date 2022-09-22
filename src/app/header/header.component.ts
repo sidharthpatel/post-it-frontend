@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { NavigationStart, Router, Event as NavigationEvent } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 
@@ -10,8 +11,9 @@ import { AuthService } from '../auth/auth.service';
 export class HeaderComponent implements OnInit, OnDestroy {
   userIsAuthenticated: boolean = false;
   private authListenerSubs: Subscription;
+  currentPage: String;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {
     this.userIsAuthenticated = this.authService.getIsAuth();
@@ -20,6 +22,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .subscribe((isAuthenticated) => {
         this.userIsAuthenticated = isAuthenticated;
       });
+    this.router.events.subscribe((event: NavigationEvent) => {
+      if (event instanceof NavigationStart) {
+        if (event.url === '/') {
+          this.currentPage = 'Posts';
+        } else if (event.url === '/auth/login') {
+          this.currentPage = 'Login';
+        } else if (event.url === '/auth/signup') {
+          this.currentPage = 'Sign Up';
+        }
+        else if(event.url === '/create') {
+          this.currentPage = 'Create New Post'
+        }
+      }
+    });
   }
 
   onLogout() {
