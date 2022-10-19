@@ -10,9 +10,9 @@ Created By: <b> Siddharth Patel </b>
 
 The following <b>required</b> functionality is completed:
 
-- [x] Set up NodeJS + Express + MongoDB + Angular application through Angular CLI
-- [x] Use NodeJS and Express efficiently
-- [x] Build resuable components in Angular and create a reactive user experience with the tools provided by Angular
+* [x] Set up NodeJS + Express + MongoDB + Angular application through Angular CLI
+* [x] Use NodeJS and Express efficiently
+* [x] Build resuable components in Angular and create a reactive user experience with the tools provided by Angular
 - [x] Connect NodeJS backend with the Angular App through Angular's HttpClient service
 - [x] Provide appropriate endpoints on your backend for your frontend to consume
 - [x] Add advanced features like image uploads and pagination
