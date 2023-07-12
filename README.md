@@ -1,4 +1,4 @@
-# [Post-it](https://post-it-frontend.herokuapp.com/)
+# Post-it
 
 Post-it is a simple MEAN stack application that allows users to add public notes with images. Each user can create, read, update, and delete their posts. However, they cannot alter other users' posts.
 
